@@ -39,7 +39,7 @@ export async function getHistoricalPoolStats(): Promise<PoolStats[]> {
 export async function getUserWithWorkersAndStats(address: string) {
   const db = await getDb();
   const userRepository = db.getRepository(User);
-
+  address = address.replace('%3A', ':'); // Decode URL-encoded address
   const user = await userRepository.findOne({
     where: { address },
     relations: {
@@ -66,6 +66,7 @@ export async function getUserWithWorkersAndStats(address: string) {
 export async function getUserHistoricalStats(address: string) {
   const db = await getDb();
   const repository = db.getRepository(UserStats);
+  address = address.replace('%3A', ':'); // Decode URL-encoded address
   return repository.find({
     where: { userAddress: address },
     order: { timestamp: 'DESC' },
